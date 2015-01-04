@@ -40,7 +40,7 @@ print('*' * 80)
 print('Vectorizing...')
 print('\t%s' % datetime.now())
 vectorizer = TfidfVectorizer(decode_error='ignore', ngram_range=(1, 2),
-                             min_df=10, max_df=0.5)
+                             min_df=10, max_df=0.5,use_idf=True)
 corpus = train['prodname'] + train['navigation'] \
     + train['merchant'] + train['brand']
 X = vectorizer.fit_transform(corpus.values)
@@ -50,7 +50,7 @@ y = train['categoryid'].values
 categoryid_set = set(train['categoryid'].values)
 print('*' * 80)
 print('Training: ')
-clf = MultinomialNB()
+clf = MultinomialNB(fit_prior=False)
 chunk = 50000
 m = X.shape[0]
 if m < chunk:
@@ -141,6 +141,13 @@ if args.persistence:
             print('\t%s\t%d categories writen' % (datetime.now(), (i + 1)))
     if (i + 1) % 10 != 0:
         print('\t%s\t%d categories writen' % (datetime.now(), (i + 1)))
+
+    print('*' * 80)
+    print("output vocabulary model")
+    with open("vocabulary.model","w") as vocab:
+        for v in vectorizer.vocabulary_:
+            ind = vectorizer.vocabulary_[v]
+            vocab.write(v+","+str(ind)+","+str(vectorizer.idf_[ind]))
 
 print('*' * 80)
 print('Finish')
