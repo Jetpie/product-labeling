@@ -67,7 +67,7 @@ print('\t%s' % datetime.now())
 X_cv = vectorizer.transform(cv['prodname'] + cv['navigation'] +
                             cv['merchant'] + cv['brand'])
 y_true = cv['categoryid'].values
-jll = clf.predict_proba(X_cv)  # joint likelihood
+jll = clf.predict_log_proba(X_cv)  # joint likelihood
 y_pred = clf.classes_[np.nanargmax(jll, axis=1)]
 max_proba = np.nanmax(jll, axis=1)
 
