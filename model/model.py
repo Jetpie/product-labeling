@@ -142,12 +142,13 @@ if args.persistence:
     if (i + 1) % 10 != 0:
         print('\t%s\t%d categories writen' % (datetime.now(), (i + 1)))
 
+    # output vocabulary model
     print('*' * 80)
     print("output vocabulary model")
-    with open("vocabulary.model","w") as vocab:
+    with codecs.open("vocabulary.model",encoding='utf-8',mode="w") as vocab:
         for v in vectorizer.vocabulary_:
             ind = vectorizer.vocabulary_[v]
-            vocab.write(v+","+str(ind)+","+str(vectorizer.idf_[ind]))
+            vocab.write(v+","+str(ind)+","+str(vectorizer.idf_[ind]) + "\n")
 
 print('*' * 80)
 print('Finish')
