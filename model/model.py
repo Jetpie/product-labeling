@@ -41,8 +41,8 @@ print('Vectorizing...')
 print('\t%s' % datetime.now())
 vectorizer = TfidfVectorizer(decode_error='ignore', ngram_range=(1, 2),
                              min_df=10, max_df=0.5,use_idf=True)
-corpus = train['prodname'] + train['navigation'] \
-    + train['merchant'] + train['brand']
+corpus = train['prodname'] + " "  + train['navigation'] \
+    + " " + train['merchant'] + " " + train['brand']
 X = vectorizer.fit_transform(corpus.values)
 y = train['categoryid'].values
 
@@ -64,8 +64,8 @@ else:
 print('*' * 80)
 print('cross validating: ')
 print('\t%s' % datetime.now())
-X_cv = vectorizer.transform(cv['prodname'] + cv['navigation'] +
-                            cv['merchant'] + cv['brand'])
+X_cv = vectorizer.transform(cv['prodname'] + " " + cv['navigation'] +
+                            " " + cv['merchant'] + " " + cv['brand'])
 y_true = cv['categoryid'].values
 jll = clf.predict_log_proba(X_cv)  # joint likelihood
 y_pred = clf.classes_[np.nanargmax(jll, axis=1)]
