@@ -100,7 +100,7 @@ def search():
         f1 = np.true_divide(2 * accuracy * recall, (accuracy + recall))
         idx_max_f1 = np.nanargmax(f1)
         # edit the json structure
-        used = False if categoryid in stop_ids else True
+        used = 0 if categoryid in stop_ids else 1
         cur_dict = {"threshold": threshold[idx_max_f1], "used":used}
         boundary_of_category.setdefault(categoryid,cur_dict)
         #boundary_of_category[categoryid] = threshold[idx_max_f1]
@@ -123,7 +123,7 @@ if not os.path.isdir('bin'):
 joblib.dump(vectorizer, 'bin/tfidf')
 joblib.dump(clf, 'bin/classifier')
 
-if False:
+if args.persistence:
     print('*' * 80)
     print('Outputting model in human readable format')
     output_dir = 'log_proba'
