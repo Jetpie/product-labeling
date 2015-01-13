@@ -77,6 +77,8 @@ max_proba = np.nanmax(jll, axis=1)
 def search():
     print('*' * 80)
     print('Searching: ')
+    with open("remove_id","r") as infile:
+        stop_ids = [line.strip() for line in infile]
     boundary_of_category = dict()
     max_p_category = np.nanmax(jll, axis=0)  # max probability in each category
     min_p_category = np.nanmin(jll, axis=0)  # min probability in each category
@@ -97,7 +99,11 @@ def search():
         recall = np.true_divide(tp_num, (tp_num + fn_num))
         f1 = np.true_divide(2 * accuracy * recall, (accuracy + recall))
         idx_max_f1 = np.nanargmax(f1)
-        boundary_of_category[categoryid] = threshold[idx_max_f1]
+        # edit the json structure
+        used = False if categoryid in stop_ids else True
+        cur_dict = {"threshold": threshold[idx_max_f1], "used":used}
+        boundary_of_category.setdefault(categoryid,cur_dict)
+        #boundary_of_category[categoryid] = threshold[idx_max_f1]
         y_pred[(max_proba < threshold[idx_max_f1])
                & (y_pred == categoryid)] = None
     if args.persistence:
@@ -117,7 +123,7 @@ if not os.path.isdir('bin'):
 joblib.dump(vectorizer, 'bin/tfidf')
 joblib.dump(clf, 'bin/classifier')
 
-if args.persistence:
+if False:
     print('*' * 80)
     print('Outputting model in human readable format')
     output_dir = 'log_proba'
